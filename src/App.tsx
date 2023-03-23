@@ -1,12 +1,10 @@
 import React from 'react';
 import './App.css';
-import ManageUser from './features/ManageUser';
-
-
+import Router from './routes/Routes.config';
 function App() {
   return (
     <div className="App">
-      <ManageUser />
+      <Router />
     </div>
   );
 }
