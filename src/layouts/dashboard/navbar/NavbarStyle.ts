@@ -1,15 +1,12 @@
- import { makeStyles } from "@material-ui/core";
+import { IconButton, Typography } from "@material-ui/core";
+import { styled } from "@mui/system";
 
- const useStyles = makeStyles((theme) => ({
-    headerContainer: {
-      background: "#be1622",
-      height: "100%"
-    },
-  
-    icon: {
-      color: "#fff"
-    },
-  
-  }));
+export const IconButtonStyle = styled(IconButton)({
+  color: "#be1222",
+});
 
-  export default useStyles
+export const TypographyStyle = styled(Typography)({
+  flexGrow: 1,
+  marginTop: '10px',
+  textAlignLast:'left'
+});

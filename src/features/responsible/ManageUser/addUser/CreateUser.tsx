@@ -1,30 +1,12 @@
-import { useState } from 'react';
 import { AddUserProps } from './AddUser.type';
 import { useAddUserMutation } from '../../../../redux/api/userApi';
 import { Button, DialogContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import * as MuiIcons from '@material-ui/icons';
-import { AvatarStyle, ButtonAddStyle, DialogStyle, DialogTitleStyle, DivButtonsStyle, DivStyle, IconButtonStyle, InputStyle, SpanStyle } from './CreateUser.style';
+import { AvatarStyle, DialogStyle, DialogTitleStyle, DivButtonsStyle, DivStyle, IconButtonStyle, InputStyle, SpanStyle } from './CreateUser.style';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-
-const supportedFormat = ['image/jpg', 'image/png', 'image/jpeg', 'image/svg', 'image/gif']
-
-const userSchema = yup.object({
-  // id: yup.number(),
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  email: yup.string().required().email('Email is invalid'),
-  password: yup.string()
-  .required('No password provided.') 
-  .min(8, 'Password is too short - should be 8 chars minimum.')
-  .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-  image: yup.mixed<File[]>()
-    .test('type', "Invalid file format selection ", (value) => value && (value && supportedFormat.includes(value[0].type))),
-    //.test('size', 'File size is too big', (value) => !value || value.size <= 1024 * 1024),
-  phoneNumber: yup.string().required(),
-  isResponsible: yup.number().required().oneOf([0, 1]),
-}).required();
+import { userSchema } from '../../../../config/constant/schema.constants';
 
 type FormData = yup.InferType<typeof userSchema>;
 
@@ -35,7 +17,7 @@ export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
     setImage(URL.createObjectURL(e.target.files[0]));
   }*/
 
-  const [createUser, { isLoading, isError, isSuccess }] = useAddUserMutation();
+  const [createUser, { isLoading, isSuccess }] = useAddUserMutation();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(userSchema)
   });
@@ -44,9 +26,9 @@ export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
     console.log(data);
     createUser(data);
   }
-if(isSuccess){
-  console.log("added");
-}
+  if (isSuccess) {
+    console.log("added");
+  }
 
   return (
     <DialogStyle open={openDialog} onClose={handleClose} disableEnforceFocus>
@@ -115,8 +97,8 @@ if(isSuccess){
           <SpanStyle>{errors.isResponsible?.message}</SpanStyle>
           <DivButtonsStyle>
             <Button variant="contained" color="inherit" onClick={handleClose}>Reset</Button>
-            <Button variant="contained" type='submit'disabled={isLoading}>
-                {isLoading ? 'Adding user...' : 'Add User'}
+            <Button variant="contained" type='submit' disabled={isLoading}>
+              {isLoading ? 'Adding user...' : 'Add User'}
             </Button>
           </DivButtonsStyle>
         </form>

@@ -1,20 +1,13 @@
 import { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import UseOpenSidebar from '../../../hooks/useOpenSidebar';
+import { MenuItem, Box, styled, Menu, Select, SvgIcon, IconButton, Typography, Toolbar } from '@mui/material';
 import { NavbarProp } from './Navbar.type';
 import logoToAdd from '../../../assets/images/anyfood.png';
 import { NavBarData } from '../../../config/constant/NavBarData';
+import { AccountCircle, Language, MenuOutlined } from '@mui/icons-material'
+import { IconButtonStyle, TypographyStyle } from './NavbarStyle';
+import { US, FR } from 'country-flag-icons/react/3x2'
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = 240;
 
@@ -42,48 +35,52 @@ const AppBar = styled(MuiAppBar, {
 
 export default function NavBarTest({ openSidebar, handleOpen }: NavbarProp) {
 
- const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
-
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { i18n } = useTranslation();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-
-
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
+  const onClickLanguageChange = (e: any) => {
+    const language = e.target.value;
+    i18n.changeLanguage(language);
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={openSidebar} sx={{
-        bgcolor: "#be1622"
-      }}>
+      <AppBar open={openSidebar} sx={{ bgcolor: '#be1222' }}>
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleOpen}
+            size="large"
             edge="start"
-            sx={{
-              marginRight: 5,
-              ...(openSidebar && { display: 'none' }),
-            }}
+            color="inherit"
+            aria-label="menu"
+            onClick={handleOpen}
           >
-            <MenuIcon />
+            <MenuOutlined />
           </IconButton>
-          <img src={logoToAdd} alt='AnyFood' />
+          <TypographyStyle>
+            <img src={logoToAdd} alt='AnyFood' />
+          </TypographyStyle>
 
-          <Box sx={{ flexGrow: 0,justifyContent:'right'  }}>
-            <Tooltip title="Open settings" sx={{ p: 0, color:'#ffffff', fontSize:'large'}}>
-              <IconButton onClick={handleOpenUserMenu} >
-                <AccountCircleIcon />
-              </IconButton>
-            </Tooltip>
+          <div>
+            <IconButton
+              style={{ marginTop: -15 }}
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenUserMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: '50px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -99,18 +96,36 @@ export default function NavBarTest({ openSidebar, handleOpen }: NavbarProp) {
               onClose={handleCloseUserMenu}
             >
               {NavBarData.map((data, index) => (
-                <MenuItem key={index} onClick={handleCloseUserMenu} sx={{color:'#be1622'}}>
-                  <IconButton sx={{color:'#be1622'}}>
+                <MenuItem key={index} onClick={handleCloseUserMenu} sx={{ color: '#be1622' }} >
+                  <IconButtonStyle >
                     {data.icon}
-                  </IconButton>
+                  </IconButtonStyle>
                   <Typography textAlign="center">{data.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+            <Select
+              onChange={onClickLanguageChange}
+              sx={{ width: 90, color: 'white', height: 30, mt: 2 }}
+              defaultValue=""
+              displayEmpty
+              renderValue={(value) => {
+                return (
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <SvgIcon >
+                      <Language />
+                    </SvgIcon>
+                    {value}
+                  </Box>
+                );
+              }}>
+              <MenuItem value='en'><US style={{ width: 20 }} />&nbsp; english</MenuItem>
+              <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; frensh</MenuItem>
+            </Select>
+          </div>
+
         </Toolbar>
       </AppBar>
-
     </Box>
   );
 }

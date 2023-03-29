@@ -1,11 +1,12 @@
 
 import gifToAdd from '../assets/images/loading.gif';
+import { Div } from './Loading.style';
 const LoadingPage = () => {
   return (
 
-    <div style={{ position: 'absolute', left: '50%', transform: 'translate(-50%,0%)' }}>
+    <Div>
       <img src={gifToAdd} alt='Loading page' />
-    </div>
+    </Div>
   );
 };
 export default LoadingPage

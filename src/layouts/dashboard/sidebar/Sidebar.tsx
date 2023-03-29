@@ -1,16 +1,9 @@
-import * as React from 'react';
+import { ListItem, ListItemIcon, ListItemText, Link, Drawer, List, Divider, IconButton } from '@mui/material';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import MuiDrawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { SidebarData } from '../../../config/constant/SideBarData';
 import { SidebarProp } from './sidebar.type';
+import * as MuiIcons from '@material-ui/icons'
 
 const drawerWidth = 240;
 
@@ -42,7 +35,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+const DrawerStyle = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
     backgroundColor: '#be1622',
@@ -63,7 +56,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function SidebarTest({ openSidebar, handleClose }: SidebarProp) {
   const theme = useTheme();
   return (
-    <Drawer variant="permanent" open={openSidebar} >
+    <DrawerStyle variant="permanent" open={openSidebar} >
       <DrawerHeader>
         <IconButton onClick={handleClose} sx={{ color: '#be1622' }}>
           {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -71,16 +64,32 @@ export default function SidebarTest({ openSidebar, handleClose }: SidebarProp) {
       </DrawerHeader>
       <Divider />
       <List>
-        {SidebarData.map((data, index) => (
-          <ListItem button key={index} sx={{ color: '#be1622' }}>
-            <ListItemIcon sx={{ color: '#be1622' }}>
-              {data.icon}
-            </ListItemIcon>
-            <ListItemText primary={data.title} />
-          </ListItem>
-        ))}
+        <ListItem >
+          <ListItemIcon sx={{ color: '#be1622' }}>
+            <MuiIcons.Home />
+          </ListItemIcon>
+          <Link href='/home' sx={{ color: '#be1622' }}>
+            <ListItemText primary='home' />
+          </Link>
+        </ListItem>
+        <ListItem >
+          <ListItemIcon sx={{ color: '#be1622' }}>
+            <MuiIcons.People />
+          </ListItemIcon>
+          <Link href='/manage-users' sx={{ color: '#be1622' }}>
+            <ListItemText primary='manage users' />
+          </Link>
+        </ListItem>
+        <ListItem >
+          <ListItemIcon sx={{ color: '#be1622' }}>
+            <MuiIcons.Restaurant />
+          </ListItemIcon>
+          <Link href='/manage-restaurants' sx={{ color: '#be1622' }}>
+            <ListItemText primary='manage restaurants' />
+          </Link>
+        </ListItem>
       </List>
       <Divider />
-    </Drawer>
+    </DrawerStyle>
   );
 }

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import imageToAdd from '../assets/images/error2.png';
+import { Div } from './Error.style';
 
 
 const ErrorPage = () => {
     return (
-        <div  style={{  position: 'absolute',left:'50%', transform: 'translate(-50%,0%)'}}>
+        <Div>
             <img src={imageToAdd} alt='error page' />
-        </div>
+        </Div>
 
     );
 };

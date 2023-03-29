@@ -1,18 +1,21 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { IUser } from "../../types/interfaces/userInterface";
-import { BASE_URL } from "../../config/constant/constants";
+import { CONFIG } from "../../config/constant/config";
+import { ENDPOINTS } from "../../config/constant/endpoints.config";
+import { METHODS } from "../../config/constant/methods.config";
 import transformResponseUser from "./transformResponseUser";
 import transformRequestUser from "./transformRequestUser";
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: CONFIG.BASE_URL_API }),
   tagTypes: ["Users"],
   endpoints: (builder) => ({
     //get all users M1
     getUsersList: builder.query<IUser[], void>({
-      query: () => "/users",
-      transformResponse: ((Response: any)=>(transformResponseUser(Response.results.data))),
+      query: () => ENDPOINTS.USERS,
+      transformResponse: (Response: any) =>
+        transformResponseUser(Response.results.data),
     }),
 
     //get single user
@@ -28,8 +31,8 @@ export const userApi = createApi({
     //create user_M1
     addUser: builder.mutation({
       query: (newUser) => ({
-        url: "/user",
-        method: "POST",
+        url: ENDPOINTS.USER,
+        method: METHODS.POST,
         body: transformRequestUser(newUser),
       }),
       invalidatesTags: [{ type: "Users", id: "LIST" }],
@@ -40,7 +43,7 @@ export const userApi = createApi({
       query({ id, formData }) {
         return {
           url: `users/${id}`,
-          method: "PATCH",
+          method: METHODS.PATCH,
           credentials: "include",
           body: formData,
         };
@@ -61,9 +64,9 @@ export const userApi = createApi({
       query(id) {
         return {
           url: `/${id}`,
-          method: "DELETE",
+          method: METHODS.DELETE,
           credentials: "include",
-          crossOrigin: true,  
+          crossOrigin: true,
         };
       },
       invalidatesTags: [{ type: "Users", id: "LIST" }],
