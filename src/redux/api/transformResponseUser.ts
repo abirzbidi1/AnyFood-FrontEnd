@@ -1,7 +1,7 @@
 import { IUser, UserApi } from "../../types/interfaces/userInterface";
 
-export default function transformResponseUser(users: UserApi[]):IUser[] {
-  const result: IUser[]=[];
+export default function transformResponseUser(users: UserApi[]): IUser[] {
+  const result: IUser[] = [];
 
   users.map((user: UserApi) => {
     result.push({
@@ -14,6 +14,5 @@ export default function transformResponseUser(users: UserApi[]):IUser[] {
       image: user.image,
     } as IUser);
   });
-
   return result;
 }

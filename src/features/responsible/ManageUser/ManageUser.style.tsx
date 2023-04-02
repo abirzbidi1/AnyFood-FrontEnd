@@ -1,33 +1,38 @@
-import { Avatar, Box, Card, InputBase, Paper, TableCell, TableContainer } from '@material-ui/core';
+import { Typography, Box, Card, InputBase, Paper, TableCell, TableContainer } from '@material-ui/core';
+import { Fab } from '@mui/material';
 import { styled } from '@mui/system';
 
 export const StyleCard = styled(Card)({
     width: '100%',
     justifyContent: 'right',
-    bgcolor: '#E0E5E4'
+    backgroundColor: '#E0E5E4'
 });
 
-export const BoxStyle = styled(Box)({
+export const BoxStyle = styled(Box)(({ theme }) => ({
     display: 'flex',
     padding: '1rem',
     margin: '2px',
-    backgroundColor: '',
-    //bgcolor: 'background.paper',
-    borderRadius: '10',
-    justifyContent: 'flex-end'
-});
+    justifyContent: 'flex-end',
+  
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '0.5rem',
+      margin: '1px',
+    },
+  }));
 
 export const PaperStyle = styled(Paper)({
-    padding: '1px',
-    marginRight: '1rem',
-    display: 'flex',
-    width: '40%'
+    padding: '2px',
+    borderRadius: '20px'
 });
 
 export const TableContainerStyle = styled(TableContainer)({
-    maxHeight: "400px",
-    width: '90%',
-    margin: 'auto'
+    width: '80%',
+    margin: 'auto',
+    borderRadius: 20,
+    border: "1px solid black",
 });
 
 export const InputBaseStyle = styled(InputBase)({
@@ -42,6 +47,16 @@ export const TableCellStyle = styled(TableCell)({
     borderBottom: "1px solid black",
 });
 
-export const AvatarStyle = styled(Avatar)({
-  
+export const TypographyStyle = styled(Typography)({
+    flexGrow: 1,
+    marginTop: '10px',
+    textAlignLast: 'left',
+    fontSize: '25px',
+    color: "#404040",
+    fontWeight: 'bold'
+});
+
+export const FabStyle = styled(Fab)({
+    //marginTop: '8px',
+    marginLeft: '20px',
 });

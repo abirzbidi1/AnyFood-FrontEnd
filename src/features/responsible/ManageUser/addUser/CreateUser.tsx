@@ -1,13 +1,14 @@
 import { AddUserProps } from './AddUser.type';
 import { useAddUserMutation } from '../../../../redux/api/userApi';
-import { Button, DialogContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Button, DialogContent, FormControl, InputLabel, Select, MenuItem, Collapse, Alert, IconButton } from '@mui/material';
 import * as MuiIcons from '@material-ui/icons';
 import { AvatarStyle, DialogStyle, DialogTitleStyle, DivButtonsStyle, DivStyle, IconButtonStyle, InputStyle, SpanStyle } from './CreateUser.style';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { userSchema } from '../../../../config/constant/schema.constants';
-
+import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 type FormData = yup.InferType<typeof userSchema>;
 
 export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
@@ -18,13 +19,23 @@ export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
   }*/
 
   const [createUser, { isLoading, isSuccess }] = useAddUserMutation();
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(userSchema)
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    createUser(data);
+  const onSubmit = async (data: FormData) => {
+    // console.log(data);
+    try {
+      const result = await createUser(data).unwrap();
+    }
+    catch (error: any) {
+      if (error.data.code === 401) {
+        setMessage('email already exist');
+        setOpen(true);
+      }
+    }
   }
   if (isSuccess) {
     console.log("added");
@@ -69,6 +80,25 @@ export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
             variant="outlined"
             {...register("email")}
           /><SpanStyle>{errors.email?.message}</SpanStyle>  <br />
+          <Collapse in={open}>
+            <Alert severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                > <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ color: 'red' }}
+            >
+              {message}
+            </Alert>
+            <br />
+          </Collapse>
           <InputStyle
             type="text"
             label="Phone number"

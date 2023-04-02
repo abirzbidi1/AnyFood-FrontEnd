@@ -10,18 +10,18 @@ export const userSchema = yup
       .string()
       .required("No password provided.")
       .min(8, "Password is too short - should be 8 chars minimum.")
-      .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
+      .matches(/[A-Za-zd@$!%*#?&]/, "Must Contain :One Uppercase, One Lowercase and one special case Character"),
     image: yup
-      .mixed<File[]>()
-      .test(
+      .mixed<File[]>().required(),
+      /*.test(
         "type",
         "Invalid file format selection ",
         (value) =>
           value &&
           value &&
           GlobalVariables.File.Image.AcceptType.includes(value[0].type)
-      ),
-    //.test('size', 'File size is too big', (value) => !value || value.size <= 1024 * 1024),
+      )
+    .test('size', 'File size is too big', (value) => !value || value.size >0),*/
     phoneNumber: yup.string().required(),
     isResponsible: yup.number().required().oneOf([0, 1]),
   })
