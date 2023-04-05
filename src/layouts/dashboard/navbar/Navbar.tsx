@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { MenuItem, Box, styled, Menu, Select, SvgIcon, IconButton, Typography, Toolbar } from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { NavbarProp } from './Navbar.type';
 import logoToAdd from '../../../assets/images/anyfood.png';
 import { NavBarData } from '../../../config/constant/NavBarData';
@@ -8,31 +8,31 @@ import { AccountCircle, Language, MenuOutlined } from '@mui/icons-material'
 import { IconButtonStyle, TypographyStyle } from './NavbarStyle';
 import { US, FR } from 'country-flag-icons/react/3x2'
 import { useTranslation } from "react-i18next";
-
-const drawerWidth = 240;
+import { drawerWidth } from '../sidebar/Sidebar.constants';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+export const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(
+  ({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+      duration: theme.transitions.duration.leavingScreen,
     }),
-  }),
-}));
-
+    ...(open && {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  })
+);
 export default function NavBarTest({ openSidebar, handleOpen }: NavbarProp) {
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -120,7 +120,7 @@ export default function NavBarTest({ openSidebar, handleOpen }: NavbarProp) {
                 );
               }}>
               <MenuItem value='en'><US style={{ width: 20 }} />&nbsp; english</MenuItem>
-              <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; frensh</MenuItem>
+              <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; french</MenuItem>
             </Select>
           </div>
 

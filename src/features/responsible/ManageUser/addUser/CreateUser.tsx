@@ -1,6 +1,6 @@
 import { AddUserProps } from './AddUser.type';
 import { useAddUserMutation } from '../../../../redux/api/userApi';
-import { Button, DialogContent, FormControl, InputLabel, Select, MenuItem, Collapse, Alert, IconButton } from '@mui/material';
+import { Button, DialogContent, FormControl, InputLabel, Select, MenuItem, Collapse, Alert, IconButton, Modal, Box, Typography } from '@mui/material';
 import * as MuiIcons from '@material-ui/icons';
 import { AvatarStyle, DialogStyle, DialogTitleStyle, DivButtonsStyle, DivStyle, IconButtonStyle, InputStyle, SpanStyle } from './CreateUser.style';
 import { useForm } from 'react-hook-form';
@@ -9,47 +9,44 @@ import * as yup from "yup";
 import { userSchema } from '../../../../config/constant/schema.constants';
 import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 type FormData = yup.InferType<typeof userSchema>;
 
 export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
-  //set image
-  /*const [image, setImage] = useState('');
-  function handleChangeImg(e: any) {
-    setImage(URL.createObjectURL(e.target.files[0]));
-  }*/
 
   const [createUser, { isLoading, isSuccess }] = useAddUserMutation();
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(userSchema)
   });
 
   const onSubmit = async (data: FormData) => {
-    // console.log(data);
+
     try {
       const result = await createUser(data).unwrap();
     }
     catch (error: any) {
       if (error.data.code === 401) {
-        setMessage('email already exist');
+        setMessage(t('addUser.exist') as string);
         setOpen(true);
       }
     }
   }
   if (isSuccess) {
-    console.log("added");
+    handleClose();
   }
-
   return (
     <DialogStyle open={openDialog} onClose={handleClose} disableEnforceFocus>
       <DialogTitleStyle >
-        Add new user
+        {t('addUser.title')}
         <IconButtonStyle aria-label="close" onClick={handleClose}>
           <MuiIcons.Close />
         </IconButtonStyle>
       </DialogTitleStyle>
       <DialogContent>
+
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
 
           <label >
@@ -126,13 +123,14 @@ export default function CreateUser({ openDialog, handleClose }: AddUserProps) {
           </FormControl>
           <SpanStyle>{errors.isResponsible?.message}</SpanStyle>
           <DivButtonsStyle>
-            <Button variant="contained" color="inherit" onClick={handleClose}>Reset</Button>
+            <Button variant="contained" color="inherit" onClick={handleClose}>{t('addUser.buttonReset')}</Button>
             <Button variant="contained" type='submit' disabled={isLoading}>
-              {isLoading ? 'Adding user...' : 'Add User'}
+              {isLoading ? t("addUser.loading")  :  t('addUser.buttonAdd') }
             </Button>
           </DivButtonsStyle>
         </form>
       </DialogContent>
+   
     </DialogStyle >
   );
 }

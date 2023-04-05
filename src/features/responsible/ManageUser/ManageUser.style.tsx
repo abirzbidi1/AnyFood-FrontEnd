@@ -37,14 +37,17 @@ export const TableContainerStyle = styled(TableContainer)({
 
 export const InputBaseStyle = styled(InputBase)({
     marginLeft: '10px',
-    flex: 1
+    flex: 1,
+     border: "1px solid gray",
+  borderRadius: 20,
+  opacity: '50%'
 });
 
 export const TableCellStyle = styled(TableCell)({
     fontSize: "1rem",
     color: "#000000",
     background: "#CACACA",
-    borderBottom: "1px solid black",
+    borderBottom: "1px black",
 });
 
 export const TypographyStyle = styled(Typography)({
@@ -57,6 +60,5 @@ export const TypographyStyle = styled(Typography)({
 });
 
 export const FabStyle = styled(Fab)({
-    //marginTop: '8px',
     marginLeft: '20px',
 });

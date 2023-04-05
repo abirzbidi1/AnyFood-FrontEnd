@@ -1,4 +1,5 @@
 import { Avatar, Button, Dialog, DialogTitle, IconButton, TextField } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 export const DialogStyle = styled(Dialog)(({ theme }) => ({
@@ -13,7 +14,6 @@ export const DialogStyle = styled(Dialog)(({ theme }) => ({
 export const DialogTitleStyle = styled(DialogTitle)({
     background: '#be1622',
     color: '#ffffff',
-    height: '60px'
 });
 
 export const IconButtonStyle = styled(IconButton)({

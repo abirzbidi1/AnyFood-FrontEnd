@@ -12,8 +12,12 @@ export const userApi = createApi({
   tagTypes: ["Users"],
   endpoints: (builder) => ({
     //get all users M1
-    getUsersList: builder.query<IUser[], void>({
-      query: () => ENDPOINTS.USERS,
+    getUsersList: builder.query({
+      query: (params : {page: number, per_page: number, searched?: string, order_column: string, order_type: string}) => ({
+        url:`users?params`,
+        method: "GET",
+        params,
+      }),
       transformResponse: (Response: any) =>
         transformResponseUser(Response.results.data),
     }),
@@ -61,7 +65,7 @@ export const userApi = createApi({
 
     //delete user
     deleteUser: builder.mutation<null, number>({
-      query(id) {
+      query(id:number) {
         return {
           url: `/${id}`,
           method: METHODS.DELETE,
