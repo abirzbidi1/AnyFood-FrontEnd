@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { Box, MenuItem, SvgIcon, TextField } from "@mui/material";
 import { Grid } from '@material-ui/core';
-import { useResetPasswordMutation } from '../../../redux/api/authApi';
+import { useResetPasswordMutation } from '../../../redux/api/authentication/authApi';
 import LogoToAdd from '../../../assets/images/small.png';
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,6 +11,10 @@ import { Alert, Collapse, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { validationSchema } from "../../../config/constant/schemas/resetPassword";
+import { SelectStyle } from "../login/Login.style";
+import { Language } from "@material-ui/icons";
+import { FR, US } from "country-flag-icons/react/3x2";
+import { useTranslation } from "react-i18next";
 
 type FormData = Yup.InferType<typeof validationSchema>;
 
@@ -19,13 +23,17 @@ export default function ResetPassword() {
   const email = params.get("email");
   const token = params.get("token");
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const { t, i18n } = useTranslation();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(validationSchema)
   });
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
-
+  const onClickLanguageChange = (e: any) => {
+    const language = e.target.value;
+    i18n.changeLanguage(language);
+}
   const onSubmit = async (data: FormData) => {
     const param = { 'password': data.password, 'password_confirmation': data.passwordConfirmation, 'email': email, 'token': token }
     try {
@@ -46,32 +54,49 @@ export default function ResetPassword() {
             </DivItemStyle>
             <DivItemStyle>
               <H2Style>
-                Reset password
+              {t("resetPassword.title")}
               </H2Style>
             </DivItemStyle>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField label="Password" type="password" fullWidth {...register("password")}/>
+              <TextField label={t("resetPassword.label_password")} type="password" fullWidth {...register("password")} />
               <SpanStyle>{errors.password?.message}</SpanStyle>
 
-              <TextField label="Confirm Password" type="password" margin="normal" fullWidth {...register("passwordConfirmation")} />
+              <TextField label={t("resetPassword.label_cpassword")}  type="password" margin="normal" fullWidth {...register("passwordConfirmation")} />
               <SpanStyle>{errors.passwordConfirmation?.message}</SpanStyle>
               <Collapse in={open}>
-                        <Alert severity="error"  sx={{ color: 'red' }}
-                            action={
-                                <IconButton aria-label="close" color="inherit" size="small"
-                                    onClick={() => {
-                                        setOpen(false);
-                                    }} >
-                                    <CloseIcon fontSize="inherit" />
-                                </IconButton>
-                            }>
-                            {message}
-                        </Alert>
-                    </Collapse>
+                <Alert severity="error" sx={{ color: 'red' }}
+                  action={
+                    <IconButton aria-label="close" color="inherit" size="small"
+                      onClick={() => {
+                        setOpen(false);
+                      }} >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }>
+                  {message}
+                </Alert>
+              </Collapse>
               <ButtonStyle type="submit" variant="contained" fullWidth disabled={isLoading}>
-                {isLoading ? 'Loading...' : ' Confirm password'}
+                {isLoading ? 'Loading...' : t("resetPassword.text_button") }
               </ButtonStyle>
             </form>
+            <br />
+                <SelectStyle defaultValue="" displayEmpty onChange={onClickLanguageChange}
+                    renderValue={(value) => {
+                        return (
+                            <Box>
+                                <>
+                                    <SvgIcon >
+                                        <Language />
+                                    </SvgIcon>
+                                    {value}
+                                </>
+                            </Box>
+                        );
+                    }}>
+                    <MenuItem value='en'><US style={{ width: 20 }} />&nbsp; English</MenuItem>
+                    <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; French</MenuItem>
+                </SelectStyle>
           </Grid>
         </PaperStyle>
       </Grid>

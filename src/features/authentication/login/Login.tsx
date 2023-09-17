@@ -8,12 +8,14 @@ import { US, FR } from 'country-flag-icons/react/3x2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LogoToAdd from '../../../assets/images/medium.png';
 import { userState } from '../../../redux/slices/userSlice';
-import { useLoginUserMutation } from "../../../redux/api/authApi";
+import { useLoginUserMutation } from "../../../redux/api/authentication/authApi";
 import { TextField, Typography, Link } from '@material-ui/core';
 import { loginSchema } from '../../../config/constant/schemas/loginSchema';
 import { Language, Visibility, VisibilityOff, Close } from '@mui/icons-material';
 import { Box, Collapse, IconButton, InputAdornment, MenuItem, SvgIcon } from '@mui/material';
 import { AlertStyle, ButtonStyle, DivItemStyle, DivStyle, H2Style, PaperStyle, SelectStyle, SpanStyle } from './Login.style';
+import { GlobalVariables } from "../../../config/constant/global.variables";
+import { saveValueLocalStorage } from "../../../utils/helpers/localStorage.helpers";
 
 type FormData = yup.InferType<typeof loginSchema>;
 export default function Login() {
@@ -37,11 +39,14 @@ export default function Login() {
     }
     const onSubmit = async (info: FormData) => {
         try {
-            const result = await loginUser(info).unwrap(); console.log(result);
-            localStorage.setItem('accessToken', result.access_token);
+            const result = await loginUser(info).unwrap();
+            saveValueLocalStorage(GlobalVariables.TOKEN, result.access_token);
+            saveValueLocalStorage(GlobalVariables.USER, JSON.stringify(result.user));
             dispatch(userState(result));
             if (result.user.is_responsible === true) {
-                navigate('/manage-users');
+                navigate('/home');
+            }else{
+                navigate('/user/home');
             }
         }
         catch (error: any) {
@@ -59,10 +64,10 @@ export default function Login() {
                     <H2Style>{t("login.title")}</H2Style>
                 </DivItemStyle>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <TextField label='Email*' placeholder='Enter email' variant='outlined' fullWidth {...register("email")} />
+                    <TextField label='Email' variant='outlined' fullWidth {...register("email")} />
                     <SpanStyle>{errors.email?.message}</SpanStyle>  <br /> <br />
 
-                    <TextField label="Password*" placeholder='Enter password' variant='outlined' type={showPassword ? 'text' : 'password'} fullWidth
+                    <TextField label={t("resetPassword.label_password")} variant='outlined' type={showPassword ? 'text' : 'password'} fullWidth
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -107,8 +112,8 @@ export default function Login() {
                             </Box>
                         );
                     }}>
-                    <MenuItem value='En'><US style={{ width: 20 }} />&nbsp; english</MenuItem>
-                    <MenuItem value='Fr'><FR style={{ width: 20 }} /> &nbsp; french</MenuItem>
+                    <MenuItem value='en'><US style={{ width: 20 }} />&nbsp; English</MenuItem>
+                    <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; French</MenuItem>
                 </SelectStyle>
             </PaperStyle>
         </DivStyle>

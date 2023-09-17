@@ -1,5 +1,5 @@
 import { Grid, TextField, Typography } from '@material-ui/core';
-import { useForgetPasswordMutation } from '../../../redux/api/authApi';
+import { useForgetPasswordMutation } from '../../../redux/api/authentication/authApi';
 import LogoToAdd from '../../../assets/images/small.png';
 import { ButtonStyle, DivItemStyle, DivStyle, LinkStyle, PaperStyle } from '../resetPassword/ResetPassword.style';
 import { H2Style, SpanStyle } from '../login/Login.style';
@@ -7,10 +7,13 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Alert, Collapse, IconButton } from '@mui/material';
+import { Alert, Box, Collapse, IconButton, MenuItem, SvgIcon } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckEmail from '../../../components/checkEmail';
-
+import { SelectStyle } from "../login/Login.style";
+import { Language } from "@material-ui/icons";
+import { FR, US } from "country-flag-icons/react/3x2";
+import { useTranslation } from "react-i18next";
 
 const ForgetPasswordSchema = yup.object({
     email: yup.string()
@@ -25,9 +28,13 @@ export default function ForgetPassword() {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: yupResolver(ForgetPasswordSchema)
     });
-    //show error
     const [message, setMessage] = useState('');
     const [open, setOpen] = useState(false);
+    const { t, i18n } = useTranslation();
+    const onClickLanguageChange = (e: any) => {
+        const language = e.target.value;
+        i18n.changeLanguage(language);
+    }
     const onSubmit = async (data: FormData) => {
         try {
             const result = await forgetPassword(data).unwrap();
@@ -55,14 +62,13 @@ export default function ForgetPassword() {
                         </DivItemStyle>
                         <DivItemStyle>
                             <H2Style>
-                                Forget password
+                                {t("forgetPassword.title")}
                             </H2Style>
                         </DivItemStyle>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <TextField
                                 label="Email*"
-                                placeholder="Enter email"
                                 variant="outlined"
                                 fullWidth
                                 {...register("email")}
@@ -90,14 +96,31 @@ export default function ForgetPassword() {
                                 type="submit"
                                 variant="contained"
                                 fullWidth disabled={isLoading}>
-                                {isLoading ? 'Loading...' : ' Forget password'}
+                                {isLoading ? 'Loading...' : t("forgetPassword.text_button")}
                             </ButtonStyle>
                         </form>
                         <Typography>
                             <LinkStyle href="/auth/login" >
-                                Back to Sign In
+                            {t("forgetPassword.back_sign_in")}
                             </LinkStyle>
                         </Typography>
+                        <br />
+                <SelectStyle defaultValue="" displayEmpty onChange={onClickLanguageChange}
+                    renderValue={(value) => {
+                        return (
+                            <Box>
+                                <>
+                                    <SvgIcon >
+                                        <Language />
+                                    </SvgIcon>
+                                    {value}
+                                </>
+                            </Box>
+                        );
+                    }}>
+                    <MenuItem value='en'><US style={{ width: 20 }} />&nbsp; English</MenuItem>
+                    <MenuItem value='fr'><FR style={{ width: 20 }} /> &nbsp; French</MenuItem>
+                </SelectStyle>
                     </Grid>
                 </PaperStyle>
             </Grid>
