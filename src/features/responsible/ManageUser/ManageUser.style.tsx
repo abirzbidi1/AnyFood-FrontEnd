@@ -13,15 +13,15 @@ export const BoxStyle = styled(Box)(({ theme }) => ({
     padding: '1rem',
     margin: '2px',
     justifyContent: 'flex-end',
-  
+
     [theme.breakpoints.down('sm')]: {
-      justifyContent: 'center',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '0.5rem',
-      margin: '1px',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '0.5rem',
+        margin: '1px',
     },
-  }));
+}));
 
 export const PaperStyle = styled(Paper)({
     padding: '2px',
@@ -38,9 +38,9 @@ export const TableContainerStyle = styled(TableContainer)({
 export const InputBaseStyle = styled(InputBase)({
     marginLeft: '10px',
     flex: 1,
-     border: "1px solid gray",
-  borderRadius: 20,
-  opacity: '50%'
+    border: "1px solid gray",
+    borderRadius: 20,
+    opacity: '50%'
 });
 
 export const TableCellStyle = styled(TableCell)({
@@ -52,9 +52,8 @@ export const TableCellStyle = styled(TableCell)({
 
 export const TypographyStyle = styled(Typography)({
     flexGrow: 1,
-    marginTop: '10px',
     textAlignLast: 'left',
-    fontSize: '25px',
+    fontSize: '35px',
     color: "#404040",
     fontWeight: 'bold'
 });

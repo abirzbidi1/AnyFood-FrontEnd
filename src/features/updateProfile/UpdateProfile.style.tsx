@@ -39,16 +39,16 @@ export const DivButtonsStyle = styled('div')({
     justifyContent: 'space-evenly'
 });
 
-export const ButtonAddStyle= styled(Button)({
-    backgroundColor:'#620D1A',
+export const ButtonAddStyle = styled(Button)({
+    backgroundColor: '#620D1A',
     color: 'white'
 });
 
-export const InputStyle= styled(TextField)({
-    margin:'7px',
+export const InputStyle = styled(TextField)({
+    margin: '7px',
     width: '100%'
 });
 
-export const SpanStyle= styled('span')({
+export const SpanStyle = styled('span')({
     color: 'red'
 });

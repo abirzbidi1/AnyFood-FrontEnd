@@ -1,6 +1,6 @@
-import { TablePagination, Table, TableSortLabel, TableHead, TableBody, TableRow, TableCell, CardHeader, CardContent, Avatar, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { TablePagination, Table, TableSortLabel, TableHead, TableBody, TableRow, TableCell, CardContent, Avatar, InputAdornment, Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
 import { StyleCard, TableCellStyle, TableContainerStyle, BoxStyle, TypographyStyle, PaperStyle, FabStyle, InputBaseStyle } from './ManageUser.style';
-import { useDeleteUserMutation, useGetUsersListQuery } from "../../../redux/api/userApi";
+import { useDeleteUserMutation, useGetUsersListQuery } from "../../../redux/api/user/userApi";
 import { IUser } from '../../../types/interfaces/userInterface';
 import { TableData } from "../../../config/constant/TableData";
 import { CONFIG } from '../../../config/constant/config';
@@ -10,21 +10,23 @@ import * as MuiIcons from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import CreateUser from './addUser/CreateUser';
 import { ChangeEvent, useState } from 'react';
+
 const ManageUser = () => {
+    const access_token = localStorage.getItem("accessToken");
+    const [token, setToken] = useState(access_token ? access_token : '');
     const [searched, setSearched] = useState("");
     const [per_page, setRowsPerPage] = useState(5);
     const [page, setPage] = useState(1);
     const [order_column, setOrderColumn] = useState('created_at');
     const [order_type, setOrderType] = useState('desc');
     const { data, isError, isLoading, isSuccess } = useGetUsersListQuery({ page, per_page, searched, order_column, order_type });
+    const [id, setId] = useState<number>();
     const [deleteUser] = useDeleteUserMutation();
     const [openDialog, setOpenDialog] = useState(false);
     const [open, setOpen] = useState(false);
     const { t } = useTranslation();
-    const [id, setId] = useState<number>();
     const handleOpen = () => { setOpenDialog(true); }
     const handleClose = () => { setOpenDialog(false); }
-
     const handleSort = (column: string) => {
         switch (column) {
             case 'First name': setOrderColumn('first_name');
@@ -40,29 +42,25 @@ const ManageUser = () => {
         }
         order_type === 'asc' ? setOrderType('desc') : setOrderType('asc');
     }
-
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
     const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
     };
-
     const handleClickOpen = (idUser: number) => {
         setId(idUser);
         setOpen(true);
     };
-
     const handleCloseDialog = () => {
         setOpen(false);
     };
-    
     const handleDelete = () => {
         if (id) {
+            console.log(id)
             deleteUser(id);
             setOpen(false);
         }
-    //    window.location.reload();
     };
     if (isLoading) {
         return <LoadingPage />;
@@ -73,7 +71,7 @@ const ManageUser = () => {
     if (isSuccess) {
         return (
             <StyleCard>
-                <CardHeader title="Manage User"> </CardHeader>
+                <br/><br/><br/>
                 <CardContent >
                     <PaperStyle >
                         <BoxStyle>
@@ -81,17 +79,13 @@ const ManageUser = () => {
                             <TypographyStyle>
                                 &nbsp;{t("manageUser.title")}
                             </TypographyStyle>
-                            <InputBaseStyle
+                            <InputBaseStyle autoFocus placeholder="Search" value={searched}
                                 startAdornment={
                                     <InputAdornment position="start">
                                         <MuiIcons.Search />
                                     </InputAdornment>
                                 }
-                                autoFocus
-                                placeholder="Search"
-                                value={searched}
-                                onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)}
-                            />
+                                onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)} />
                             <FabStyle variant="extended" color="success" onClick={handleOpen}>
                                 <MuiIcons.Add />
                                 {t('manageUser.add_user')}
@@ -104,9 +98,7 @@ const ManageUser = () => {
                                     <TableRow >
                                         {TableData.map((data, index) => (
                                             <TableCellStyle className="head" align="center" key={index}>
-                                                <TableSortLabel
-                                                    onClick={() => handleSort(data)}
-                                                >{data}</TableSortLabel>
+                                                <TableSortLabel onClick={() => handleSort(data)}>{data}</TableSortLabel>
                                             </TableCellStyle>
                                         ))}
                                     </TableRow>
@@ -140,25 +132,16 @@ const ManageUser = () => {
                         />
                     </PaperStyle>
                 </CardContent>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
+                <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
                     <DialogTitle id="alert-dialog-title">
                         {t('manageUser.message')}
                     </DialogTitle>
-
                     <DialogActions>
                         <Button onClick={handleCloseDialog}>{t('manageUser.cancel')}</Button>
-                        <Button onClick={handleDelete} autoFocus>
-                            {t('manageUser.delete')}
-                        </Button>
+                        <Button onClick={handleDelete}>{t('manageUser.delete')}</Button>
                     </DialogActions>
                 </Dialog>
             </StyleCard>
-
         );
     } else {
         return null;

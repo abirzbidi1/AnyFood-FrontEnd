@@ -5,4 +5,11 @@ export const addUser = {
   message: "Utilisateur ajouté avec succès",
   exist: "l'adresse email est déjà utilisée !",
   loading: "Adding user ...",
+  label_firstname:"Prénom",
+  label_lastname: "nom",
+  label_email: "Email",
+  label_phone: "Numéro de téléphone",
+  label_password: "Mot de passe",
+  user: " Client",
+  responsible: "Responsable",
 };

@@ -1,5 +1,5 @@
 export interface IUser {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -18,4 +18,11 @@ export interface UserApi {
   image:  File[];
   phone_number: string;
   is_responsible?: boolean;
+}
+
+export interface IUpdateUser {
+  firstName: string;
+  lastName: string;
+  image: File[] ;
+  phoneNumber: string;
 }
