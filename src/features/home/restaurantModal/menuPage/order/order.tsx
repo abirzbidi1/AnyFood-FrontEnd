@@ -75,7 +75,6 @@ if(isSuccess){
                 quantity: quantity,
                 amount: total,
             };
-            console.log(orderVariables);
             passOrder({
                 variables: orderVariables,
                 

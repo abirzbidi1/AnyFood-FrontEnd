@@ -57,7 +57,6 @@ const ManageUser = () => {
     };
     const handleDelete = () => {
         if (id) {
-            console.log(id)
             deleteUser(id);
             setOpen(false);
         }

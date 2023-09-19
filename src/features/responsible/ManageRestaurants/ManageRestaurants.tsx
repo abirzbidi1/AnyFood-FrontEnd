@@ -58,7 +58,6 @@ const ManageRestaurant = () => {
         setOpen(false);
     };
     const handleDelete = () => {
-        console.log(id)
         if (id) {
             deleteRestaurant(id);
             setOpen(false);
