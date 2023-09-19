@@ -1,4 +1,5 @@
 import { Paper, Link } from '@material-ui/core';
+import { Select } from '@mui/material';
 import { styled } from '@mui/system';
 
 export const PaperStyle = styled(Paper)({
@@ -31,3 +32,9 @@ export const H3Style = styled('h3')({
     fontSize: '24px',
     color: '#595959'
 });
+
+export const SelectStyle = styled(Select)({
+    width: 90,
+    height: 30,
+    marginLeft: '60%',
+  });

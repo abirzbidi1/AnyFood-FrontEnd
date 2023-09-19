@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { GlobalVariables } from "./global.variables";
+import { GlobalVariables } from "../global.variables";
 
 export const userSchema = yup
   .object({

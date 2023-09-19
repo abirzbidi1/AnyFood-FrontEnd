@@ -10,4 +10,10 @@ export const GlobalVariables = {
       ],
     },
   },
+
+  USER_TAG: "Users",
+  RESTAURANT_TAG: "Restaurants",
+
+  USER: "user",
+  TOKEN: "accessToken",
 };
