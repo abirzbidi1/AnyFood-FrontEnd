@@ -5,12 +5,17 @@ import { Outlet } from "react-router-dom";
 import UseOpenSidebar from "../../hooks/useOpenSidebar";
 
 export default function DashboardLayout() {
-    const {openSidebar, handleOpen, handleClose } = UseOpenSidebar();
+    const { openSidebar, handleOpen, handleClose } = UseOpenSidebar();
     return (
-        <Box sx={{display: 'flex'}}>
-            <NavBarTest openSidebar={openSidebar} handleOpen={handleOpen}/>
-            <SidebarTest openSidebar={openSidebar} handleClose={handleClose}/>     
-            <Outlet/>
-        </Box>
+        <div style={{
+            backgroundImage: "linear-gradient(#FFFFC3,#FFCB06)",
+            color: "darkred",
+        }}>
+            <Box sx={{ display: 'flex' }}>
+                <NavBarTest openSidebar={openSidebar} handleOpen={handleOpen} />
+                <SidebarTest openSidebar={openSidebar} handleClose={handleClose} />
+                <Outlet />
+            </Box>
+        </div>
     );
 }

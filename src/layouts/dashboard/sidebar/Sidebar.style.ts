@@ -1,4 +1,4 @@
-import { CSSObject, Drawer, styled, Theme } from "@mui/material";
+import { Avatar, CSSObject, Drawer, styled, Theme } from "@mui/material";
 import { drawerWidth } from "./Sidebar.constants";
 
 
@@ -48,3 +48,9 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
+
+export const AvatarStyle = styled(Avatar)({
+  position:'unset',
+  width:'70px',
+  height:'70px'
+});
